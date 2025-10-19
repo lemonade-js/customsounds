@@ -1,0 +1,21 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+
+# this shit is hacky as hell, but it works
+
+[[patches]]
+[patches.pattern]
+target = "preload/sounds.lua"
+pattern = '''
+map = {
+'''
+position = "before"
+match_indent = true
+payload = '''
+replaceSound = function(self, sound, newPath)
+    self[sound] = love.sound.newSoundData(newPath)
+end,
+'''

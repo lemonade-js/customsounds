@@ -1,0 +1,4 @@
+{"id":"customsounds","version":"0.1","author":"gooberlemonade","name":"Custom Sounds","config":{"music":{"caution":"default","menuloop":"default","menuloopBPM":108}
+,"sfx":{"pause":"default","hover":"default","mine":"default","barely":"default","side":"default","block":"default","tap":"default","click":"default","miss":"default","hold":"default"}
+}
+,"enabled":true,"description":"Allows for replacing sound effects and music in game"}

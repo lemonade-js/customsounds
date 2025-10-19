@@ -1,0 +1,161 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+
+
+# sfx
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = '''cs = bs.load(project.initState)'''
+position = "after"
+payload = '''
+local customsfx = {
+    { label = "Barely", value = "barely", fallback = "assets/sfx/barely.ogg" },
+    { label = "Block", value = "block", fallback = "assets/sfx/click.ogg" },
+    { label = "Click", value = "click", fallback = "assets/sfx/click.ogg" },
+    { label = "Hold", value = "hold", fallback = "assets/sfx/hold.ogg" },
+    { label = "Hover", value = "hover", fallback = "assets/sfx/click.ogg" },
+    { label = "Mine", value = "mine", fallback = "assets/sfx/mine.ogg" },
+    { label = "Pause", value = "pause", fallback = "assets/sfx/pause.ogg" },
+    { label = "Side", value = "side", fallback = "assets/sfx/click.ogg" },
+    { label = "Tap", value = "tap", fallback = "assets/sfx/tap.ogg" },
+    { label = "Miss", value = "miss", fallback = "assets/sfx/mine.ogg" }
+}
+
+local function replaceSounds()
+    for i = 1, #customsfx, 1 do
+        local audioPath = customsfx[i].fallback
+
+        if mods.customsounds.config.sfx[customsfx[i].value] ~= "default" and love.filesystem.exists("Mods/customsounds/customsounds/sfx/" .. customsfx[i].value .. "/" .. mods.customsounds.config.sfx[customsfx[i].value]) then
+            audioPath = "Mods/customsounds/customsounds/sfx/" .. customsfx[i].value .. "/" .. mods.customsounds.config.sfx[customsfx[i].value]
+        end
+
+        if love.filesystem.exists(audioPath) then
+            --sounds[customsfx[i].value] = audioPath
+            sounds:replaceSound(customsfx[i].value, audioPath)
+        end
+    end
+end
+
+-- run when the game loads
+replaceSounds()
+
+-- is this scuffed as shit? probably. does it work? also probably.
+local metatable = {
+    __newindex = function(table, key, value)
+        replaceSounds()
+        rawset(table, key, value)
+    end
+}
+
+setmetatable(mods.customsounds.config.sfx, metatable)
+'''
+match_indent = true
+
+
+
+# menuloop
+
+[[patches]]
+[patches.pattern]
+target = "obj/MenuMusicManager.lua"
+pattern = '''
+function MenuMusicManager:play()
+	if savedata.options.audio.playMenuMusic then
+		self.music
+			:load('assets/music/menuloop.ogg')
+			:setBPM(108)
+			:setLooping(true)
+			:play()
+	end
+end
+'''
+position = "at"
+payload = '''
+-- tbh i'm too lazy to make this change without restarting, uhh yeah
+
+function MenuMusicManager:play()
+	if savedata.options.audio.playMenuMusic then
+        audioPath = 'assets/music/menuloop.ogg'
+
+        if mods.customsounds.config.music.menuloop ~= "default" and love.filesystem.exists("Mods/customsounds/customsounds/music/menuloop/" .. mods.customsounds.config.music.menuloop) then
+            audioPath = "Mods/customsounds/customsounds/music/menuloop/" .. mods.customsounds.config.music.menuloop
+        end
+
+		self.music
+			:load(audioPath)
+			:setBPM(mods.customsounds.config.music.menuloopBPM)
+			:setLooping(true)
+			:play()
+	end
+end
+'''
+match_indent = true
+
+
+
+# caution
+
+[[patches]]
+[patches.pattern]
+target = "states/EditorWarning.lua"
+pattern = '''
+st:setInit(function(self)
+	self.caution = ez.newjson('assets/editor/warning/caution'):instance()
+	shuv.resetPal()
+	shuv.pal[2] = {r=255,g=216,b=0}
+	te.play('assets/music/caution.ogg','stream','music')
+end)
+'''
+position = "at"
+payload = '''
+-- same with this
+
+st:setInit(function(self)
+    audioPath = 'assets/music/caution.ogg'
+
+    if mods.customsounds.config.music.caution ~= "default" and love.filesystem.exists("Mods/customsounds/customsounds/music/caution/" .. mods.customsounds.config.music.caution) then
+        audioPath = "Mods/customsounds/customsounds/music/caution/" .. mods.customsounds.config.music.caution
+    end
+
+	self.caution = ez.newjson('assets/editor/warning/caution'):instance()
+	shuv.resetPal()
+	shuv.pal[2] = {r=255,g=216,b=0}
+	te.play(audioPath,'stream','music')
+end)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Error.lua"
+pattern = '''
+st:setInit(function(self)
+	self.errorMessage = self.errorMessage or 'No error provided???'
+	self.errorSprite = ez.newjson('assets/error/error'):instance()
+	shuv.resetPal()
+	te.play('assets/music/caution.ogg','stream','music')
+end)
+'''
+position = "at"
+payload = '''
+-- mrow :3
+
+st:setInit(function(self)
+    audioPath = 'assets/music/caution.ogg'
+
+    if mods.customsounds.config.music.caution ~= "default" and love.filesystem.exists("Mods/customsounds/customsounds/music/caution/" .. mods.customsounds.config.music.caution) then
+        audioPath = "Mods/customsounds/customsounds/music/caution/" .. mods.customsounds.config.music.caution
+    end
+
+	self.errorMessage = self.errorMessage or 'No error provided???'
+	self.errorSprite = ez.newjson('assets/error/error'):instance()
+	shuv.resetPal()
+	te.play(audioPath,'stream','music')
+end)
+'''
+match_indent = true

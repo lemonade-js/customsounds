@@ -1,0 +1,239 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+
+
+# block
+
+[[patches]]
+[patches.pattern]
+target = "obj/notes/Block.lua"
+pattern = '''self.hitSound = sounds.click'''
+position = "at"
+payload = '''
+self.hitSound = sounds.block
+'''
+match_indent = true
+
+
+
+# side
+
+[[patches]]
+[patches.pattern]
+target = "obj/notes/Side.lua"
+pattern = '''--self.hitSound = sounds.side'''
+position = "at"
+payload = '''self.hitSound = sounds.side'''
+match_indent = true
+
+
+
+# miss
+
+[[patches]]
+[patches.pattern]
+target = "obj/GameManager.lua"
+pattern = '''
+te.playOne(sounds.mine,"static",'sfx')
+'''
+position = "at"
+payload = '''
+-- this doesn't seem to do anything, but i'm leaving it here
+te.playOne(sounds.miss,"static",'sfx')
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "obj/notes/Block.lua"
+pattern = '''
+te.playOne(sounds.mine,"static",'sfx')
+'''
+position = "at"
+payload = '''
+if self.name == "mine" then
+    te.playOne(sounds.mine,"static",'sfx')
+else
+    te.playOne(sounds.miss,"static",'sfx')
+end
+'''
+match_indent = true
+
+
+
+# hover
+
+[[patches]]
+[patches.pattern]
+target = "states/SongSelect.lua"
+pattern = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Game.lua"
+pattern = '''
+te.playOne(sounds.click,"static",'sfx',1, 0.5)
+'''
+position = "at"
+payload = '''
+te.playOne(sounds.hover,"static",'sfx',1, 0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "obj/MarathonResults.lua"
+pattern = '''
+te.play(sounds.click, "static", "sfx", 0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover, "static", "sfx", 0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "obj/OptionsList.lua"
+pattern = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "obj/RadialList.lua"
+pattern = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "obj/SortingButton.lua"
+pattern = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Costumes.lua"
+pattern = '''
+te.play(sounds.click, "static", "sfx", 0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover, "static", "sfx", 0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Keybinds.lua"
+pattern = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.hover,"static",'sfx',0.5)
+'''
+match_indent = true
+
+
+
+# click
+
+[[patches]]
+[patches.pattern]
+target = "obj/OptionsList.lua"
+pattern = '''
+te.play(sounds.hold,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "obj/RadialList.lua"
+pattern = '''
+te.play(sounds.hold,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Costumes.lua"
+pattern = '''
+te.play(sounds.hold, "static", "sfx", 0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Keybinds.lua"
+pattern = '''
+te.play(sounds.hold,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/Menu.lua"
+pattern = '''
+te.play(sounds.hold,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "states/SongSelect.lua"
+pattern = '''
+te.play(sounds.hold,"static",'sfx',0.5)
+'''
+position = "at"
+payload = '''
+te.play(sounds.click,"static",'sfx',0.5)
+'''
+match_indent = true
